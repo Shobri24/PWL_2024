@@ -27,5 +27,10 @@ class WelcomeController extends Controller
      {
          return 'Halaman Artikel dengan Id ' . $id;
      }
-
-}
+    
+    public function greeting() {
+        return view ('blog.hello')
+        ->with('name', 'Shobri')
+        ->with('occupation', 'Astronaut');
+    }
+    }
