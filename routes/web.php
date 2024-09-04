@@ -2,8 +2,14 @@
 
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\BabyController;
+use App\Http\Controllers\BeautyController;
+use App\Http\Controllers\FoodController;
+use App\Http\Controllers\HomeCareController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\PhotoController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
@@ -84,3 +90,15 @@ Route::resource('photos', PhotoController::class)->except('create', 'store', 'up
 });*/
 
 Route::get('/greeting', [WelcomeController::class, 'greeting']);
+
+Route::get('/', [HomeController::class, 'index']);
+
+
+Route::get('/food-beverage', [FoodController::class, 'food_beverage']);
+Route::get('/beauty-health', [BeautyController::class, 'beauty_health']);
+Route::get('/home-care', [HomeCareController::class, 'home_care']);
+Route::get('/baby-kid', [BabyController::class, 'baby_kid']);
+
+Route::get('/user/{id}/name/{name}', [UserController::class, 'show']);
+
+Route::get('/penjualan', [PenjualanController::class, 'index'])->name('penjualan');
