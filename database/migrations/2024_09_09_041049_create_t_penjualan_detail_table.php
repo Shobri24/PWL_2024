@@ -11,7 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::dropIfExists('t_penjualan_detail');
         Schema::create('t_penjualan_detail', function (Blueprint $table) {
             $table->id('detail_id');
             $table->unsignedBigInteger('barang_id')->index(); // indexing untuk Foreignkey
