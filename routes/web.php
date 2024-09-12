@@ -55,13 +55,13 @@ Route::get('/articles/{id}', function ($id) {
     return 'Halaman Artikel dengan ID ' . $id;
 });
 
-Route::get('/user/{name?}', function ($name=null) {
-    return 'Nama Saya ' . $name;
-});
+//Route::get('/user/{name?}', function ($name=null) {
+  //  return 'Nama Saya ' . $name;
+//});
 
-Route::get('/user/{name?}', function ($name='John') {
-    return 'Nama Saya ' . $name;
-});
+//Route::get('/user/{name?}', function ($name='John') {
+  //  return 'Nama Saya ' . $name;
+//});
 
 Route::get ('/hello', [WelcomeController::class,'hello']);
 
@@ -107,3 +107,4 @@ Route::get('/penjualan', [PenjualanController::class, 'index'])->name('penjualan
 
 Route::get('/level', [LevelController::class, 'index']);
 Route::get('/kategori', [KategoriController::class, 'index']);
+Route::get('/user', [UserController::class, 'index']);
