@@ -7,6 +7,7 @@ use App\Http\Controllers\BeautyController;
 use App\Http\Controllers\FoodController;
 use App\Http\Controllers\HomeCareController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LevelController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\UserController;
@@ -102,3 +103,5 @@ Route::get('/baby-kid', [BabyController::class, 'baby_kid']);
 Route::get('/user/{id}/name/{name}', [UserController::class, 'show']);
 
 Route::get('/penjualan', [PenjualanController::class, 'index'])->name('penjualan');
+
+Route::get('/level', [LevelController::class, 'index']);
