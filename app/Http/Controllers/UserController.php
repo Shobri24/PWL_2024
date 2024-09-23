@@ -11,12 +11,32 @@ class UserController extends Controller
 {
    public function index()
 {
-   // $users = UserModel::where('level_id', 2)->get();
-   //dd($user);
-   //return view('user', ['data' => $user]);
-    $users = UserModel::where('level_id', 2)->get();
-    $userCount = $users->count();
-    return view('user', ['data' => $users, 'count' => $userCount]);
+    /*$user = UserModel::firstOrCreate(
+        [
+            'username' => 'manager22',
+            'nama' => 'Manager Dua Dua',
+            'password' => Hash::make('12345'),
+            'level_id' => 2
+        ],
+        );*/
+
+        /*$user = UserModel::firstOrNew(
+            [
+                'username' => 'manager',
+                'nama' => 'Manager'
+            ],
+            );*/
+
+            $user = UserModel::firstOrNew(
+                [
+                    'username' => 'manager33',
+                    'nama' => 'Manager Tiga Tiga',
+                    'password' => Hash::make('12345'),
+                    'level_id' => 2
+                ],
+                );
+                $user->save();
+    return view('user', ['data' => $user]);
 }
 
 
