@@ -8,20 +8,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 use function Laravel\Prompts\password;
 
-class UserModel extends Model
+class LevelModel extends Model
 {
     use HasFactory;
 
-    protected $table = 'm_user';
-    protected $primaryKey = 'user_id';
+    protected $table = 'm_level';
+    protected $primaryKey = 'level_id';
     /**
      * The attributes that are mass assignable
      * 
      * @var array
      */
-    protected $fillable = ['level_id', 'username', 'nama', 'password', 'user_id'];
-    public function level(): BelongsTo
-    {
-        return $this->belongsTo(LevelModel::class, 'level_id', 'level_id');
-    }
+    protected $fillable = ['level_id', 'level_kode', 'level_nama'];
 }
