@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use function Laravel\Prompts\password;
+
 class UserModel extends Model
 {
     use HasFactory;
@@ -18,5 +20,5 @@ class UserModel extends Model
      */
 
     //protected $fillable = ['level_id', 'username', 'nama', 'password'];
-    protected $fillable = ['level_id', 'username', 'nama'];
+    protected $fillable = ['level_id', 'username', 'nama', 'password'];
 }
