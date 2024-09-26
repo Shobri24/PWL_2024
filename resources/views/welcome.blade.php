@@ -1,8 +1,14 @@
-<html>
-    <head>
-        <title> PWL 2024</title>
-    </head>
-    <body>
-        <h2> Selamat Datang di Pemrograman Web Lanjut 2024</h2>
-    </body>
-</html>
+@extends('layouts.template')
+
+@section('content')
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Halo, apakabar!!!</h3>
+        <div class="card-tools"></div>
+    </div>
+    <div class="card-body">
+        Selamat datang semua, ini adalah halaman utama dari aplikasi ini.
+    </div>
+</div>
+@endsection
