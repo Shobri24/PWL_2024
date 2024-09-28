@@ -8,16 +8,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 use function Laravel\Prompts\password;
 
-class UserModel extends Model
+class SupplierModel extends Model
 {
     use HasFactory;
 
-    protected $table = 'm_user';
-    protected $primaryKey = 'user_id';
+    protected $table = 'm_supplier';
+    protected $primaryKey = 'supplier_id';
     /**
      * The attributes that are mass assignable
      * 
      * @var array
      */
-    protected $fillable = ['user_id', 'level_id', 'username', 'nama', 'password'];
+    protected $fillable = ['supplier_id', 'supplier_kode', 'supplier_nama', 'supplier_alamat'];
 }
