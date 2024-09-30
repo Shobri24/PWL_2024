@@ -7,6 +7,7 @@ use App\Models\UserModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -220,4 +221,55 @@ class UserController extends Controller
             return redirect('/user')->with('error', 'Data user gagal dihapus karena masih terdapat tabel lain yang terkait dengan data ini');
         }
     }
+
+    public function create_ajax()
+    {
+        $level = LevelModel::select('level_id', 'level_nama')->get();
+
+        return view('user.create_ajax')
+                    ->with('level', $level);
+    }
+
+    public function store_ajax(Request $request) {
+        // Cek apakah request berupa Ajax
+        if ($request->ajax() || $request->wantsJson()) {
+            // Aturan validasi
+            $rules = [
+                'level_id' => 'required|integer',
+                'username' => 'required|string|min:3|unique:m_user,username',
+                'nama' => 'required|string|max:100',
+                'password' => 'required|min:6'
+            ];
+    
+            // Menggunakan Validator untuk memvalidasi input
+            $validator = Validator::make($request->all(), $rules);
+    
+            // Jika validasi gagal, kembalikan respon JSON dengan pesan error
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi Gagal',
+                    'msgField' => $validator->errors() // pesan error validasi
+                ]);
+            }
+    
+            // Jika validasi berhasil, simpan data user
+            UserModel::create([
+                'username' => $request->username,
+                'nama' => $request->nama,
+                'password' => bcrypt($request->password), // pastikan password dienkripsi
+                'level_id' => $request->level_id,
+            ]);
+    
+            // Kembalikan respon JSON berhasil
+            return response()->json([
+                'status' => true,
+                'message' => 'Data user berhasil disimpan'
+            ]);
+        }
+    
+        // Jika bukan request Ajax, redirect ke halaman utama
+        return redirect('/');
+    }
+    
 }
