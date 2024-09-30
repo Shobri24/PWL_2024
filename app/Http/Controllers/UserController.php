@@ -52,14 +52,17 @@ class UserController extends Controller
             // Menambahkan kolom aksi (tombol-tombol edit, detail, hapus)
             ->addColumn('aksi', function ($user) {
                 // Tombol detail
-                $btn = '<a href="' . url('/user/' . $user->user_id) . '" class="btn btn-info btn-sm">Detail</a>';
+                /*$btn = '<a href="' . url('/user/' . $user->user_id) . '" class="btn btn-info btn-sm">Detail</a>';
                 // Tombol edit
                 $btn .= ' <a href="' . url('/user/' . $user->user_id . '/edit') . '" class="btn btn-warning btn-sm">Edit</a>';
                 // Tombol hapus (menggunakan form POST dengan metode DELETE)
                 $btn .= '<form class="d-inline-block" method="POST" action="' . url('/user/' . $user->user_id) . '">'
                     . csrf_field()
                     . method_field('DELETE')
-                    . '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah Anda yakin menghapus data ini?\');">Hapus</button></form>';
+                    . '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah Anda yakin menghapus data ini?\');">Hapus</button></form>';*/
+                $btn  = '<button onclick="modalAction(\'' . url('/user/' . $user->user_id . '/show_ajax') . '\')" class="btn btn-info btn-sm" title="Detail User">Detail</button>';
+                $btn .= ' <button onclick="modalAction(\'' . url('/user/' . $user->user_id . '/edit_ajax') . '\')" class="btn btn-warning btn-sm" title="Edit User">Edit</button>';
+                $btn .= ' <button onclick="modalAction(\'' . url('/user/' . $user->user_id . '/delete_ajax') . '\')" class="btn btn-danger btn-sm" title="Hapus User">Hapus</button>';
                 return $btn;
             })
             // Memberitahu bahwa kolom aksi adalah HTML
@@ -227,10 +230,11 @@ class UserController extends Controller
         $level = LevelModel::select('level_id', 'level_nama')->get();
 
         return view('user.create_ajax')
-                    ->with('level', $level);
+            ->with('level', $level);
     }
 
-    public function store_ajax(Request $request) {
+    public function store_ajax(Request $request)
+    {
         // Cek apakah request berupa Ajax
         if ($request->ajax() || $request->wantsJson()) {
             // Aturan validasi
@@ -240,10 +244,10 @@ class UserController extends Controller
                 'nama' => 'required|string|max:100',
                 'password' => 'required|min:6'
             ];
-    
+
             // Menggunakan Validator untuk memvalidasi input
             $validator = Validator::make($request->all(), $rules);
-    
+
             // Jika validasi gagal, kembalikan respon JSON dengan pesan error
             if ($validator->fails()) {
                 return response()->json([
@@ -252,7 +256,7 @@ class UserController extends Controller
                     'msgField' => $validator->errors() // pesan error validasi
                 ]);
             }
-    
+
             // Jika validasi berhasil, simpan data user
             UserModel::create([
                 'username' => $request->username,
@@ -260,16 +264,76 @@ class UserController extends Controller
                 'password' => bcrypt($request->password), // pastikan password dienkripsi
                 'level_id' => $request->level_id,
             ]);
-    
+
             // Kembalikan respon JSON berhasil
             return response()->json([
                 'status' => true,
                 'message' => 'Data user berhasil disimpan'
             ]);
         }
-    
+
         // Jika bukan request Ajax, redirect ke halaman utama
         return redirect('/');
     }
-    
+
+    public function edit_ajax(string $id)
+    {
+        // Retrieve the user by ID, or return a 404 if not found
+        $user = UserModel::findOrFail($id);
+
+        // Retrieve all levels for the dropdown selection
+        $levels = LevelModel::select('level_id', 'level_nama')->get();
+
+        // Return the edit view with user and levels data
+        return view('user.edit_ajax', [
+            'user' => $user,
+            'levels' => $levels
+        ]);
+    }
+
+    public function update_ajax(Request $request, $id)
+    {
+        // Check if the request is from Ajax
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'level_id' => 'required|integer', // Fixed typo and formatting
+                'username' => 'required|max:20|unique:m_user,username,' . $id . ',user_id', // Fixed formatting
+                'nama' => 'required|max:100', // Fixed formatting
+                'password' => 'nullable|min:6|max:20' // Fixed formatting
+            ];
+
+            // Use the Validator facade
+            $validator = Validator::make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false, // JSON response: true for success, false for failure
+                    'message' => 'Validasi gagal.',
+                    'msgField' => $validator->errors() // Show which fields have errors
+                ]);
+            }
+
+            $user = UserModel::find($id);
+            if ($user) {
+                // If password is not filled, remove it from the request
+                if (!$request->filled('password')) {
+                    $request->request->remove('password');
+                }
+                // Update user data
+                $user->update($request->all());
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data berhasil diupdate'
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data tidak ditemukan'
+                ]);
+            }
+        }
+
+        return redirect('/'); // Redirect if not an AJAX request
+    }
 }
