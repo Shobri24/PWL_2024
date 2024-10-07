@@ -2,30 +2,26 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class UserModel extends Model
+class UserModel extends Authenticatable
 {
     use HasFactory;
 
-    // Menghubungkan dengan tabel 'm_user'
     protected $table = 'm_user';
-    
-    // Primary key dari tabel
     protected $primaryKey = 'user_id';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['user_id', 'level_id', 'username', 'nama', 'password'];
+    protected $fillable = ['username', 'password', 'nama', 'level_id', 'created_at', 'updated_at'];
 
-    /**
-     * Relasi dengan model Level
-     */
+    protected $hidden = ['password'];
+
+    protected $casts = [
+        'password' => 'hashed'
+    ];
+
     public function level(): BelongsTo
     {
         return $this->belongsTo(LevelModel::class, 'level_id', 'level_id');

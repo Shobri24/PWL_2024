@@ -18,9 +18,7 @@
             <li class="nav-item">
                 <a href="{{ url('/') }}" class="nav-link {{ $activeMenu == 'dashboard' ? 'active' : '' }}">
                     <i class="nav-icon fas fa-tachometer-alt"></i>
-                    <p>
-                        Dashboard
-                    </p>
+                    <p>Dashboard</p>
                 </a>
             </li>
             <li class="nav-header">Data Pengguna</li>
@@ -36,7 +34,6 @@
                     <p>Data User</p>
                 </a>
             </li>
-
             <li class="nav-header">Data Barang</li>
             <li class="nav-item">
                 <a href="{{ url('/kategori') }}" class="nav-link {{ $activeMenu == 'kategori' ? 'active' : '' }}">
@@ -51,7 +48,6 @@
                 </a>
             </li>
 
-            <!-- New Section for Supplier -->
             <li class="nav-header">Data Supplier</li>
             <li class="nav-item">
                 <a href="{{ url('/supplier') }}" class="nav-link {{ $activeMenu == 'supplier' ? 'active' : '' }}">
@@ -71,6 +67,15 @@
                 <a href="{{ url('/penjualan') }}" class="nav-link {{ $activeMenu == 'penjualan' ? 'active' : '' }}">
                     <i class="nav-icon fas fa-cash-register"></i>
                     <p>Transaksi Penjualan</p>
+                </a>
+            </li>
+
+            <!-- Add Log Out Button -->
+            <li class="nav-header">Akun</li>
+            <li class="nav-item">
+                <a href="{{ url('logout') }}" class="nav-link">
+                    <i class="nav-icon fas fa-sign-out-alt"></i>
+                    <p>Log Out</p>
                 </a>
             </li>
         </ul>

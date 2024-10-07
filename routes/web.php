@@ -17,8 +17,17 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
-Route::get('/', [WelcomeController::class, 'index']);
+
+Route::pattern('id', '[0-9]+');
+
+Route::get('login', [AuthController::class, 'login'])->name('login');
+Route::post('login', [AuthController::class, 'postlogin']);
+Route::get('logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
+Route::middleware(['auth'])->group(function(){
+    Route::get('/', [WelcomeController::class, 'index']);
 
 // User Routes
 Route::group(['prefix' => 'user'], function () {
@@ -105,4 +114,5 @@ Route::group(['prefix' => 'supplier'], function () {
     Route::get('/{id}/delete_ajax', [SupplierController::class, 'confirm_ajax']); // Show form delet ajax
     Route::delete('/{id}/delete_ajax', [SupplierController::class, 'delete_ajax']); // hapus level aajax
     Route::delete('/{id}', [SupplierController::class, 'destroy']); // Delete level
+});
 });
