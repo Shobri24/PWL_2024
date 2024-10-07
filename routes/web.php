@@ -48,7 +48,7 @@ Route::group(['prefix' => 'user'], function () {
 });
 
 // Level Routes
-Route::group(['prefix' => 'level'], function () {
+Route::middleware(['authorize:ADM'])->group(function(){
     Route::get('/', [LevelController::class, 'index']); // Display level listing
     Route::post('/list', [LevelController::class, 'list']); // Return level data in JSON for datatables
     Route::get('/create', [LevelController::class, 'create']); // Show form to add a new level
