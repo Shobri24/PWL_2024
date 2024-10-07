@@ -44,25 +44,27 @@ Route::group(['prefix' => 'user'], function () {
     Route::put('/{id}/update_ajax', [UserController::class, 'update_ajax']); // Save edited user details ajax
     Route::get('/{id}/delete_ajax', [UserController::class, 'confirm_ajax']); // Show form delet ajax
     Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax']); // hapus user aajax
-    Route::delete('/{id}', [UserController::class, 'destroy']); // Delete user
+    Route::delete('/{id}', [UserController::class, 'destroy']); // Delete user  
 });
 
 // Level Routes
-Route::middleware(['authorize:ADM'])->group(function(){
-    Route::get('/', [LevelController::class, 'index']); // Display level listing
-    Route::post('/list', [LevelController::class, 'list']); // Return level data in JSON for datatables
-    Route::get('/create', [LevelController::class, 'create']); // Show form to add a new level
-    Route::post('/', [LevelController::class, 'store']); // Save a new level
-    Route::get('/create_ajax', [LevelController::class, 'create_ajax']); // menampilkan halaman form tambah level ajax
-    Route::post('/ajax', [LevelController::class, 'store_ajax']); // menyimpan data user baru ajax
-    Route::get('/{id}', [LevelController::class, 'show']); // Show level details
-    Route::get('/{id}/edit', [LevelController::class, 'edit']); // Show form to edit level
-    Route::put('/{id}', [LevelController::class, 'update']); // Save edited level details
-    Route::get('/{id}/edit_ajax', [LevelController::class, 'edit_ajax']); // Show form to edit level ajax
-    Route::put('/{id}/update_ajax', [LevelController::class, 'update_ajax']); // Save edited level details ajax
-    Route::get('/{id}/delete_ajax', [LevelController::class, 'confirm_ajax']); // Show form delet ajax
-    Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax']); // hapus level aajax
-    Route::delete('/{id}', [LevelController::class, 'destroy']); // Delete level
+Route::middleware(['authorize:ADM,MNG'])->group(function() {
+    Route::prefix('level')->group(function () {
+        Route::get('/', [LevelController::class, 'index'])->name('level.index'); // Display level listing
+        Route::post('/list', [LevelController::class, 'list'])->name('level.list'); // Return level data in JSON for datatables
+        Route::get('/create', [LevelController::class, 'create'])->name('level.create'); // Show form to add a new level
+        Route::post('/', [LevelController::class, 'store'])->name('level.store'); // Save a new level
+        Route::get('/create_ajax', [LevelController::class, 'create_ajax'])->name('level.create_ajax'); // Show form to add a new level via AJAX
+        Route::post('/ajax', [LevelController::class, 'store_ajax'])->name('level.store_ajax'); // Save new level data via AJAX
+        Route::get('/{id}', [LevelController::class, 'show'])->name('level.show'); // Show level details
+        Route::get('/{id}/edit', [LevelController::class, 'edit'])->name('level.edit'); // Show form to edit level
+        Route::put('/{id}', [LevelController::class, 'update'])->name('level.update'); // Save edited level details
+        Route::get('/{id}/edit_ajax', [LevelController::class, 'edit_ajax'])->name('level.edit_ajax'); // Show form to edit level via AJAX
+        Route::put('/{id}/update_ajax', [LevelController::class, 'update_ajax'])->name('level.update_ajax'); // Save edited level details via AJAX
+        Route::get('/{id}/delete_ajax', [LevelController::class, 'confirm_ajax'])->name('level.confirm_ajax'); // Show confirmation for delete via AJAX
+        Route::delete('/{id}', [LevelController::class, 'destroy'])->name('level.destroy'); // Delete level
+        Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax'])->name('level.delete_ajax'); // Delete level via AJAX
+    });
 });
 
 Route::group(['prefix' => 'kategori'], function () {
