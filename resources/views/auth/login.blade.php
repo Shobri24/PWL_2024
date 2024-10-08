@@ -58,6 +58,12 @@
           </div>
         </div>
       </form>
+
+      <!-- Register Link -->
+      <div class="mt-3 text-center">
+        <p>Don't have an account? <a href="{{ url('register') }}">Register here</a></p>
+      </div>
+      
     </div>
   </div>
 </div>
