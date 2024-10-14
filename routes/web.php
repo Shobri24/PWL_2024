@@ -104,6 +104,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{id}/delete_ajax', [BarangController::class, 'confirm_ajax']); // Show form delet ajax
         Route::delete('/{id}/delete_ajax', [BarangController::class, 'delete_ajax']); // hapus level aajax
         Route::delete('/{id}', [BarangController::class, 'destroy']); // Delete level
+        Route::get('/import', [BarangController::class, 'import']);
+        Route::post('/import_ajax', [BarangController::class, 'import_ajax']);
     });
 
     Route::middleware(['authorize:ADM,MNG'])->group(function () {
