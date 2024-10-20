@@ -1,4 +1,5 @@
 @extends ('layouts.template')
+
 @section('content')
     <div class="card card-outline card-primary">
         <div class="card-header">
@@ -16,6 +17,16 @@
                     <tr>
                         <th>ID</th>
                         <td>{{ $user->user_id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Foto Profile</th>
+                        <td>
+                            @if($user->avatar) <!-- Memastikan ada foto -->
+                                <img src="{{ asset('storage/' . $user->avatar) }}" alt="avatar" style="width: 100px; height: 100px; border-radius: 50%;">
+                            @else
+                                <span>Tidak ada foto</span>
+                            @endif
+                        </td>
                     </tr>
                     <tr>
                         <th>Level</th>

@@ -7,6 +7,8 @@ use App\Models\UserModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -39,7 +41,7 @@ class UserController extends Controller
     public function list(Request $request)
     {
         // Mengambil data user beserta relasi 'level' menggunakan ORM Eloquent
-        $users = UserModel::select('user_id', 'username', 'nama', 'level_id')
+        $users = UserModel::select('user_id', 'username', 'nama', 'level_id', 'avatar')
             ->with('level');
 
         if ($request->level_id) {
@@ -242,7 +244,8 @@ class UserController extends Controller
                 'level_id' => 'required|integer',
                 'username' => 'required|string|min:3|unique:m_user,username',
                 'nama' => 'required|string|max:100',
-                'password' => 'required|min:6'
+                'password' => 'required|min:6',
+                'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             ];
 
             // Menggunakan Validator untuk memvalidasi input
@@ -257,18 +260,26 @@ class UserController extends Controller
                 ]);
             }
 
+            // Simpan file gambar jika ada
+            $avatarPath = null;
+            if ($request->hasFile('avatar')) {
+                $avatarPath = $request->file('avatar')->store('avatars', 'public');
+            }
+
             // Jika validasi berhasil, simpan data user
             UserModel::create([
                 'username' => $request->username,
                 'nama' => $request->nama,
                 'password' => bcrypt($request->password), // pastikan password dienkripsi
                 'level_id' => $request->level_id,
+                'avatar' => $avatarPath,
             ]);
 
             // Kembalikan respon JSON berhasil
             return response()->json([
                 'status' => true,
-                'message' => 'Data user berhasil disimpan'
+                'message' => 'Data user berhasil disimpan',
+                'avatar' => $avatarPath,
             ]);
         }
 
@@ -299,7 +310,8 @@ class UserController extends Controller
                 'level_id' => 'required|integer', // Fixed typo and formatting
                 'username' => 'required|max:20|unique:m_user,username,' . $id . ',user_id', // Fixed formatting
                 'nama' => 'required|max:100', // Fixed formatting
-                'password' => 'nullable|min:6|max:20' // Fixed formatting
+                'password' => 'nullable|min:6|max:20', // Fixed formatting
+                'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             ];
 
             // Use the Validator facade
@@ -319,12 +331,27 @@ class UserController extends Controller
                 if (!$request->filled('password')) {
                     $request->request->remove('password');
                 }
+            } else {
+                // Enkripsi password jika diisi
+                $request['password'] = bcrypt($request->password);
+            }
+
+            // Simpan file gambar jika ada
+            if ($request->hasFile('avatar')) {
+                // Hapus gambar lama jika ada
+                if ($user->avatar) {
+                    Storage::disk('public')->delete($user->avatar);
+                }
+                // Simpan gambar baru
+                $request['avatar'] = $request->file('avatar')->store('avatars', 'public');
+            }
                 // Update user data
                 $user->update($request->all());
 
                 return response()->json([
                     'status' => true,
-                    'message' => 'Data berhasil diupdate'
+                    'message' => 'Data berhasil diupdate',
+                    'avatar' => $user->avatar
                 ]);
             } else {
                 return response()->json([
@@ -332,8 +359,6 @@ class UserController extends Controller
                     'message' => 'Data tidak ditemukan'
                 ]);
             }
-        }
-
         return redirect('/'); // Redirect if not an AJAX request
     }
 

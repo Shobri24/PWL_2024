@@ -17,7 +17,7 @@
         </div>
     </div>
 @else
-    <form action="{{ url('/user/' . $user->user_id . '/update_ajax') }}" method="POST" id="formedit">
+    <form action="{{ url('/user/' . $user->user_id . '/update_ajax') }}" method="POST" id="formedit" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div id="modal-master" class="modal-dialog modal-lg" role="document">
@@ -57,6 +57,14 @@
                         <small class="form-text text-muted">Abaikan jika tidak ingin ubah password</small>
                         <small id="error-password" class="error-text form-text text-danger"></small>
                     </div>
+
+                    <!-- Avatar -->
+                    <div class="form-group">
+                        <label>Avatar (Foto Profil)</label>
+                        <input type="file" name="avatar" id="avatar" class="form-control" accept="image/*">
+                        <small id="error-avatar" class="error-text form-text text-danger"></small>
+                        <small class="form-text text-muted">Abaikan jika tidak ingin mengubah foto</small>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
@@ -67,7 +75,7 @@
     </form>
     <script>
         $(document).ready(function() {
-            $("#formedit").validate({ // Corrected form ID to 'formedit'
+            $("#formedit").validate({
                 rules: {
                     level_id: { required: true, number: true },
                     username: { required: true, minlength: 3, maxlength: 20 },
@@ -75,10 +83,14 @@
                     password: { minlength: 6, maxlength: 20 }
                 },
                 submitHandler: function(form) {
+                    var formData = new FormData(form); // Menggunakan FormData untuk mengirim file
+
                     $.ajax({
                         url: form.action,
                         type: form.method,
-                        data: $(form).serialize(),
+                        data: formData,
+                        contentType: false, // Jaga agar tidak mengatur konten tipe
+                        processData: false, // Jangan proses data
                         success: function(response) {
                             if (response.status) {
                                 $('#myModal').modal('hide');

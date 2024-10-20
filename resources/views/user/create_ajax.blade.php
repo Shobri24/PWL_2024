@@ -1,4 +1,4 @@
-<form action="{{ url('/user/ajax') }}" method="POST" id="form-tambah">
+<form action="{{ url('/user/ajax') }}" method="POST" id="form-tambah" enctype="multipart/form-data">
     @csrf
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -41,6 +41,13 @@
                     <input type="password" name="password" id="password" class="form-control" required>
                     <small id="error-password" class="error-text form-text text-danger"></small>
                 </div>
+
+                <!-- Avatar -->
+                <div class="form-group">
+                    <label>Avatar (Foto Profil)</label>
+                    <input type="file" name="avatar" id="avatar" class="form-control" accept="image/*">
+                    <small id="error-avatar" class="error-text form-text text-danger"></small>
+                </div>
             </div>
 
             <div class="modal-footer">
@@ -73,13 +80,20 @@
                     required: true,
                     minlength: 6,
                     maxlength: 20
+                },
+                avatar: {
+                    extension: "jpeg|png|jpg|gif",
                 }
             },
             submitHandler: function(form) {
+                var formData = new FormData(form); // Menggunakan FormData untuk mengirim file
+
                 $.ajax({
                     url: form.action,
                     type: form.method,
-                    data: $(form).serialize(),
+                    data: formData,
+                    contentType: false, // Jaga agar tidak mengatur konten tipe
+                    processData: false, // Jangan proses data
                     success: function(response) {
                         if (response.status) {
                             $('#myModal').modal('hide');
@@ -88,7 +102,7 @@
                                 title: 'Berhasil',
                                 text: response.message
                             });
-                            dataUser.ajax.reload();
+                            tableUser.ajax.reload();
                         } else {
                             $('.error-text').text('');
                             $.each(response.msgField, function(prefix, val) {

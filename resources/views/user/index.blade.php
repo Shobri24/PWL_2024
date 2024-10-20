@@ -37,6 +37,7 @@
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Foto Profile</th>
                         <th>Username</th>
                         <th>Nama</th>
                         <th>Level Pengguna</th>
@@ -81,6 +82,14 @@
                         className: "text-center",
                         orderable: false,
                         searchable: false
+                    },
+                    {
+                        data: "avatar", // Menambahkan kolom foto
+                        orderable: false,
+                        searchable: false,
+                        render: function(data) {
+                            return data; // Mengembalikan HTML foto
+                        }
                     },
                     {
                         data: "username",
