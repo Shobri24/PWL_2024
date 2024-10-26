@@ -5,6 +5,11 @@
         <div class="card-header">
             <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools">
+                <button onclick="modalAction('{{ url('/user/import') }}')" class="btn btn-info">Import user</button>
+                <a href="{{ url('/user/export_excel') }}" class="btn btn-primary"><i class="fa fa-file-excel"></i> Export
+                    user</a>
+                <a href="{{ url('/user/export_pdf') }}" class="btn btn-warning"><i class="fa fa-file-pdf"></i> Export
+                    user</a>
                 <a class="btn btn-sm btn-primary mt-1" href="{{ url('user/create') }}">Tambah</a>
                 <button onclick="modalAction('{{ url('user/create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah
                     Ajax</button>
@@ -72,6 +77,7 @@
                 processing: true, // Menampilkan indikator loading
                 ajax: {
                     "url": "{{ url('user/list') }}",
+                    "dataType": "json",
                     "type": "POST",
                     "data": function(d) {
                         d.level_id = $('#level_id').val(); // Mengambil data dari filter
@@ -84,11 +90,16 @@
                         searchable: false
                     },
                     {
-                        data: "avatar", // Menambahkan kolom foto
+                        data: "foto", // Menambahkan kolom foto
                         orderable: false,
                         searchable: false,
-                        render: function(data) {
-                            return data; // Mengembalikan HTML foto
+                        "render": function(data) {
+                            // Periksa apakah ada data foto
+                            if (data) {
+                                return '<img src="{{ asset('storage') }}/' + data +
+                                    '" width="50px" alt="User Photo"/>';
+                            }
+                            return 'Foto Kosong';
                         }
                     },
                     {

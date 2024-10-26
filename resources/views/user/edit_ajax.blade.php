@@ -58,11 +58,11 @@
                         <small id="error-password" class="error-text form-text text-danger"></small>
                     </div>
 
-                    <!-- Avatar -->
+                    <!-- foto -->
                     <div class="form-group">
-                        <label>Avatar (Foto Profil)</label>
-                        <input type="file" name="avatar" id="avatar" class="form-control" accept="image/*">
-                        <small id="error-avatar" class="error-text form-text text-danger"></small>
+                        <label>foto (Foto Profil)</label>
+                        <input type="file" name="foto" id="foto" class="form-control" accept="image/*">
+                        <small id="error-foto" class="error-text form-text text-danger"></small>
                         <small class="form-text text-muted">Abaikan jika tidak ingin mengubah foto</small>
                     </div>
                 </div>

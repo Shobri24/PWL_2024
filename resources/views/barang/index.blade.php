@@ -82,7 +82,7 @@ $(document).ready(function() {
             }
         },
         columns: [
-            { data: "kategori_id", className: "text-center", width: "5%", orderable: false, searchable: false },
+            { data: "DT_RowIndex", className: "text-center", width: "5%", orderable: false, searchable: false },
             { data: "barang_kode", className: "", width: "10%", orderable: true, searchable: true },
             { data: "barang_nama", className: "", width: "37%", orderable: true, searchable: true },
             { data: "harga_beli", className: "", width: "10%", orderable: true, searchable: false,

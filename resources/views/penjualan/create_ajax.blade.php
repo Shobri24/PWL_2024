@@ -1,55 +1,42 @@
-<form action="{{ url('/user/ajax') }}" method="POST" id="form-tambah" enctype="multipart/form-data">
+<form action="{{ url('/penjualan/ajax') }}" method="POST" id="form-tambah">
     @csrf
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Tambah Data User</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title" id="exampleModalLabel">Tambah Data Penjualan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <!-- Level Pengguna -->
                 <div class="form-group">
-                    <label>Level Pengguna</label>
-                    <select name="level_id" id="level_id" class="form-control" required>
-                        <option value="">- Pilih Level -</option>
-                        @foreach($level as $l)
-                            <option value="{{ $l->level_id }}">{{ $l->level_nama }}</option>
+                    <label>User</label>
+                    <select class="form-control" id="user_id" name="user_id" required>
+                        <option value="">- Pilih user -</option>
+                        @foreach ($user as $c)
+                            <option value="{{ $c->user_id }}">{{ $c->username }}</option>
                         @endforeach
                     </select>
-                    <small id="error-level_id" class="error-text form-text text-danger"></small>
+                    <small id="error-user_id" class="error-text form-text text-danger"></small>
                 </div>
-
-                <!-- Username -->
                 <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" name="username" id="username" class="form-control" required>
-                    <small id="error-username" class="error-text form-text text-danger"></small>
+                    <label>Nama Pembeli</label>
+                    <input value="" type="text" name="pembeli" id="pembeli" class="form-control"
+                        required>
+                    <small id="error-pembeli" class="error-text form-text text-danger"></small>
                 </div>
-
-                <!-- Nama -->
                 <div class="form-group">
-                    <label>Nama</label>
-                    <input type="text" name="nama" id="nama" class="form-control" required>
-                    <small id="error-nama" class="error-text form-text text-danger"></small>
+                    <label>Kode Penjualan</label>
+                    <input value="" type="text" name="penjualan_kode" id="penjualan_kode" class="form-control"
+                        required>
+                    <small id="error-penjualan_kode" class="error-text form-text text-danger"></small>
                 </div>
-
-                <!-- Password -->
                 <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" name="password" id="password" class="form-control" required>
-                    <small id="error-password" class="error-text form-text text-danger"></small>
-                </div>
-
-                <!-- foto -->
-                <div class="form-group">
-                    <label>foto (Foto Profil)</label>
-                    <input type="file" name="foto" id="foto" class="form-control" accept="image/*">
-                    <small id="error-foto" class="error-text form-text text-danger"></small>
+                    <label>Tanggal Penjualan</label>
+                    <input value="" type="date" name="penjualan_tanggal" id="penjualan_tanggal" class="form-control"
+                        required>
+                    <small id="error-penjualan_tanggal" class="error-text form-text text-danger"></small>
                 </div>
             </div>
-
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
                 <button type="submit" class="btn btn-primary">Simpan</button>
@@ -57,43 +44,32 @@
         </div>
     </div>
 </form>
-
 <script>
     $(document).ready(function() {
         $("#form-tambah").validate({
             rules: {
-                level_id: {
+                user_id: {
                     required: true,
                     number: true
                 },
-                username: {
+                pembeli: {
                     required: true,
-                    minlength: 3,
-                    maxlength: 20
+                    minlength: 3
                 },
-                nama: {
+                penjualan_kode: {
                     required: true,
-                    minlength: 3,
-                    maxlength: 100
+                    minlength: 3
                 },
-                password: {
+                penjualan_tanggal: {
                     required: true,
-                    minlength: 6,
-                    maxlength: 20
-                },
-                foto: {
-                    extension: "jpeg|png|jpg|gif",
+                    minlength: 3
                 }
             },
             submitHandler: function(form) {
-                var formData = new FormData(form); // Menggunakan FormData untuk mengirim file
-
                 $.ajax({
                     url: form.action,
                     type: form.method,
-                    data: formData,
-                    contentType: false, // Jaga agar tidak mengatur konten tipe
-                    processData: false, // Jangan proses data
+                    data: $(form).serialize(),
                     success: function(response) {
                         if (response.status) {
                             $('#myModal').modal('hide');
@@ -102,7 +78,7 @@
                                 title: 'Berhasil',
                                 text: response.message
                             });
-                            tableUser.ajax.reload();
+                            tablePenjualan.ajax.reload();
                         } else {
                             $('.error-text').text('');
                             $.each(response.msgField, function(prefix, val) {
